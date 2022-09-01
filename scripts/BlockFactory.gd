@@ -19,7 +19,7 @@ func spawnNewBlock():
 	add_child(currentBlock)
 	GlobalVariables.startTimer()
 
-func _process(delta):
+func _process(_delta):
 	if (GlobalVariables.inPlace == true):
 		GlobalVariables.destroyTimer()
 		tileMap.placeBlocksOnTileMap(GlobalVariables.blockCoords, currentColor)
