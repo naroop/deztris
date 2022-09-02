@@ -6,6 +6,7 @@ var currentColor: String
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
 	spawnNewBlock()
 
 func spawnNewBlock():
@@ -21,8 +22,10 @@ func spawnNewBlock():
 
 func _process(_delta):
 	if (GlobalVariables.inPlace == true):
+		GlobalVariables.inPlace = false
 		GlobalVariables.destroyTimer()
 		tileMap.placeBlocksOnTileMap(GlobalVariables.blockCoords, currentColor)
+		var t = tileMap.lineHandler()
 		remove_child(currentBlock)
 		spawnNewBlock()
 

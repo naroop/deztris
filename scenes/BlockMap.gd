@@ -1,44 +1,50 @@
 extends TileMap
 
+onready var BlocksUtil = get_parent().get_node("BlocksUtil")
+
 func placeBlocksOnTileMap(coords, color):
 	for b in coords:
 		var pos = world_to_map(b.global_position)
 		set_cell(pos.x, pos.y, GlobalVariables.tiles[color])
-	lineHandler()
 
-func lineHandler():
-	var rowsToBeDeleted = checkForLines()
-	if (rowsToBeDeleted.size() > 0):
-		var totalLines = rowsToBeDeleted.keys().size()
-		deleteLines(rowsToBeDeleted)
-		moveTilesDown(totalLines)
-
-func checkForLines(): # Returns a dictionary of all complete lines
+func lineHandler(): # Returns a dictionary of all complete lines
 	var cells = get_used_cells()
-	var completeLines = {}
-	for row in range(19, 0, -1):
-		var cellsInRow = getCellsInRow(cells, row)
-		if (cellsInRow.size() == 10):
-			completeLines[row] = cellsInRow
-	return completeLines
+	for line in range(20):
+		var cellsInLine = getCellsInLine(cells, line)
+		if (cellsInLine.size() == 10):
+			deleteLine(cellsInLine) # delete all cells in that line
+			yield(get_tree().create_timer(0.09), "timeout")
+			moveCellsAboveLine(line) # move all cells above that line down one position
 
-func getCellsInRow(cells, rowNumber): # Gets cells in the given row
-	var row = []
+func getCellsInLine(cells, lineNumber): # Gets cells in the given line
+	var line = []
 	for c in cells:
-		if (c.y == rowNumber):
-			row.append(c)
-	return row
+		if (c.y == lineNumber):
+			line.append(c)
+	return line
 
-func deleteLines(rowsToBeDeleted):
-	for rowNumber in rowsToBeDeleted.keys():
-		for cell in rowsToBeDeleted[rowNumber]:
-			set_cellv(cell, -1) # Deletes tile from tilemap
-
-func moveTilesDown(lineCount):
-	var remainingCells = get_used_cells()
-	for cell in remainingCells:
-		var blockType = get_cellv(cell)
-		var newCoords = Vector2(cell.x, cell.y + lineCount)
+func deleteLine(cellsInLine):
+	for cell in cellsInLine:
 		set_cellv(cell, -1)
-		set_cellv(newCoords, blockType)
 
+func moveCellsAboveLine(lineNumber):
+	var potentialCells = get_used_cells()
+	for cell in potentialCells: # copy to blocks util
+		if (cell.y < lineNumber):
+			copyCellToUtil(cell, false)
+		else:
+			copyCellToUtil(cell, true)
+	utilToBlocks() # replace blocks with BU
+
+func copyCellToUtil(cell, dontMoveDown):
+	if (!dontMoveDown):
+		BlocksUtil.set_cell(cell.x, cell.y + 1, get_cellv(cell))
+	else:
+		BlocksUtil.set_cell(cell.x, cell.y, get_cellv(cell))
+
+func utilToBlocks():
+	clear()
+	var copiedBlocks = BlocksUtil.get_used_cells()
+	for cell in copiedBlocks:
+		set_cellv(cell, BlocksUtil.get_cellv(cell))
+	BlocksUtil.clear()
