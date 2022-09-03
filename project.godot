@@ -16,12 +16,13 @@ config/icon="res://icon.png"
 
 [autoload]
 
-GlobalVariables="*res://scripts/GlobalVariables.gd"
+Game="*res://scripts/Game.gd"
 
 [display]
 
-window/size/width=200
-window/size/height=400
+window/size/width=400
+window/size/height=840
+window/stretch/shrink=2.0
 
 [importer_defaults]
 
@@ -72,6 +73,7 @@ down={
 
 [physics]
 
+common/physics_fps=38
 common/enable_pause_aware_picking=true
 
 [rendering]

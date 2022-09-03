@@ -10,23 +10,29 @@ func _ready():
 	spawnNewBlock()
 
 func spawnNewBlock():
-	GlobalVariables.inPlace = false
-	GlobalVariables.createTimer()
+	Game.inPlace = false
+	Game.createTimer()
 	
-	var blockName = GlobalVariables.blocks.keys()[ randi() % GlobalVariables.blocks.size() ]
-	currentBlock = load(GlobalVariables.blocks[blockName]).instance()
-	currentColor = GlobalVariables.blockColors[blockName]
+	var blockName = Game.BLOCKS.keys()[ randi() % Game.BLOCKS.size() ]
+	currentBlock = load(Game.BLOCKS[blockName]).instance()
+	currentColor = Game.BLOCK_COLORS[blockName]
 	
 	add_child(currentBlock)
-	GlobalVariables.startTimer()
+	Game.startTimer()
 
 func _process(_delta):
-	if (GlobalVariables.inPlace == true):
-		GlobalVariables.inPlace = false
-		GlobalVariables.destroyTimer()
-		tileMap.placeBlocksOnTileMap(GlobalVariables.blockCoords, currentColor)
-		var t = tileMap.lineHandler()
-		remove_child(currentBlock)
-		spawnNewBlock()
+	if (Game.inPlace == true):
+		Game.inPlace = false
+		Game.destroyTimer()
+		tileMap.placeBlocksOnTileMap(Game.blockCoords, currentColor)
+		if (!Game.gameOver):
+			tileMap.lineHandler()
+			remove_child(currentBlock)
+			spawnNewBlock()
+		else:
+			gameOver()
+			
+func gameOver():
+	get_tree().quit()
 
 
