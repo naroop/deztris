@@ -53,3 +53,8 @@ func startTimer():
 	
 func destroyTimer():
 	timer.queue_free()
+	
+func resetVariables():
+	lines = 0
+	points = 0
+	level = 1

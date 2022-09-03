@@ -6,7 +6,8 @@ var inputs = {
 	"right": Vector2.RIGHT, 
 	"left": Vector2.LEFT, 
 	"down": Vector2.DOWN,
-	"rotate": null
+	"rotate": null,
+	"slam": null
 }
 
 func _ready():
@@ -22,6 +23,8 @@ func _physics_process(_delta):
 		action("rotate")
 	if Input.is_action_pressed("down"):
 		action("down")
+	if Input.is_action_just_pressed("slam"):
+		action("slam")
 
 func action(action):
 	if (action == "rotate"):
@@ -31,6 +34,12 @@ func action(action):
 			return
 		else:
 			attemptRotate(90, false)
+	elif (action == "slam"):
+		while(true):
+			var prevPos = position
+			if(move_and_collide(Vector2.DOWN * Game.TILE_SIZE)):
+				position = prevPos
+				break
 	else:
 		var prevPos = position
 		if (move_and_collide(inputs[action] * Game.TILE_SIZE)):
@@ -40,6 +49,7 @@ func _on_Timer_timeout():
 	if (move_and_collide(Vector2.DOWN * Game.TILE_SIZE)):
 		Game.blockCoords = points
 		Game.inPlace = true
+		print(String(Game.inPlace))
 
 func halfRotate():
 	if (rotation_degrees == 90):

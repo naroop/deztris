@@ -1,6 +1,7 @@
 extends Node2D
 
 onready var tileMap = get_parent().get_node("Blocks")
+onready var gameOverScreen = get_parent().get_node("GameOver")
 var currentBlock: KinematicBody2D
 var currentColor: String
 
@@ -14,6 +15,7 @@ func spawnNewBlock():
 	Game.createTimer()
 	
 	var blockName = Game.BLOCKS.keys()[ randi() % Game.BLOCKS.size() ]
+	print("spawned " + blockName)
 	currentBlock = load(Game.BLOCKS[blockName]).instance()
 	currentColor = Game.BLOCK_COLORS[blockName]
 	
@@ -33,6 +35,17 @@ func _process(_delta):
 			gameOver()
 			
 func gameOver():
-	get_tree().quit()
+	gameOverScreen.visible = true
+	while(true):
+		if Input.is_action_just_pressed("restart"):
+			restartGame()
+			break
+		if Input.is_action_just_pressed("exit"):
+			get_tree().quit()
 
+func restartGame():
+	Game.resetVariables()
+	tileMap.resetMapsAndUI()
+	gameOverScreen.visible = false
+	spawnNewBlock()
 

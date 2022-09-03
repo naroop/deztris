@@ -5,9 +5,18 @@ onready var pointsUI = get_parent().get_node("Background/Points")
 onready var linesUI = get_parent().get_node("Background/Lines")
 onready var levelUI = get_parent().get_node("Background/Level")
 
+func resetMapsAndUI(): # Global variables are assumed to have been reset before this function runs
+	blockUtil.clear()
+	clear()
+	linesUI.set_text("Lines " + String(Game.lines))
+	levelUI.set_text("Level " + String(Game.level))
+	pointsUI.set_text("00000".substr(String(Game.points).length()) + String(Game.points))
+	
+
 func placeBlocksOnTileMap(coords, color):
 	for b in coords:
 		var pos = world_to_map(b.global_position)
+		print(pos)
 		set_cell(pos.x, pos.y, Game.TILES[color])
 		if (pos.y == 0):
 			Game.gameOver = true
@@ -26,7 +35,6 @@ func lineHandler(): # Returns a dictionary of all complete lines
 			moveCellsAboveLine(line)
 	
 	if (linesGotten):
-		print(linesGotten)
 		updateLLAP(linesGotten)
 
 func getCellsInLine(cells, lineNumber): # Gets cells in the given line
