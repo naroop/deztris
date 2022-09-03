@@ -32,6 +32,7 @@ const BLOCK_COLORS = {
 
 var inPlace: bool = false
 var gameOver: bool  = false
+var gamePaused: bool = false
 var blockCoords: Array
 var timer : Timer
 
@@ -46,7 +47,7 @@ func createTimer():
 	timer.set_wait_time(speed)
 	
 func setLevel():
-	Game.level = floor(lines / 10) + 1
+	Game.level = (lines / 10) + 1
 
 func startTimer():
 	timer.start()
@@ -54,7 +55,17 @@ func startTimer():
 func destroyTimer():
 	timer.queue_free()
 	
+func pauseTimer():
+	if (timer.is_paused()):
+		timer.set_paused(false)
+	elif (!timer.is_paused()):
+		timer.set_paused(true)
+	
 func resetVariables():
+	gamePaused = false
+	inPlace = false
+	gameOver = false
+	blockCoords = []
 	lines = 0
 	points = 0
 	level = 1

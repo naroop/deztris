@@ -4,6 +4,8 @@ onready var blockUtil = get_parent().get_node("BlocksUtil")
 onready var pointsUI = get_parent().get_node("Background/Points")
 onready var linesUI = get_parent().get_node("Background/Lines")
 onready var levelUI = get_parent().get_node("Background/Level")
+onready var blockSound = get_node("blockPlaced")
+onready var lineSound = get_node("lineRemoved")
 
 func resetMapsAndUI(): # Global variables are assumed to have been reset before this function runs
 	blockUtil.clear()
@@ -14,6 +16,7 @@ func resetMapsAndUI(): # Global variables are assumed to have been reset before 
 	
 
 func placeBlocksOnTileMap(coords, color):
+	blockSound.play()
 	for b in coords:
 		var pos = world_to_map(b.global_position)
 		print(pos)
@@ -35,6 +38,7 @@ func lineHandler(): # Returns a dictionary of all complete lines
 			moveCellsAboveLine(line)
 	
 	if (linesGotten):
+		lineSound.play()
 		updateLLAP(linesGotten)
 
 func getCellsInLine(cells, lineNumber): # Gets cells in the given line
