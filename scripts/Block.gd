@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 onready var points = [$Body/b1, $Body/b2, $Body/b3, $Body/b4]
+onready var rotateSound = get_node("rotate")
 
 var inputs = {
 	"right": Vector2.RIGHT, 
@@ -62,10 +63,12 @@ func halfRotate():
 func attemptRotate(degrees, setting):
 	var prevRotation = rotation_degrees
 	var prevPosition = position
-	if (setting): # attempt to rotate here
+	if (setting):
 		rotation_degrees = degrees
 	else:
 		rotation_degrees += degrees 
 	if (move_and_collide(Vector2.ZERO)):
 		rotation_degrees = prevRotation
 		position = prevPosition
+	else:
+		rotateSound.play()

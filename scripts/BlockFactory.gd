@@ -4,6 +4,7 @@ onready var tileMap = get_parent().get_node("Blocks")
 onready var gameOverScreen = get_parent().get_node("GameOver")
 onready var startGameScreen = get_parent().get_node("StartGame")
 onready var pauseGameScreen = get_parent().get_node("PauseGame")
+onready var nextDisplay = get_parent().get_node("Background/NextDisplay")
 var currentBlock: KinematicBody2D
 var currentColor: String
 
@@ -17,9 +18,10 @@ func spawnNewBlock():
 	Game.inPlace = false
 	Game.createTimer()
 	
-	var blockName = Game.BLOCKS.keys()[ randi() % Game.BLOCKS.size() ]
+	var blockName = Game.getNewBlock()
 	currentBlock = load(Game.BLOCKS[blockName]).instance()
 	currentColor = Game.BLOCK_COLORS[blockName]
+	nextDisplay.setNextBlock(Game.getNextBlock())
 	
 	add_child(currentBlock)
 	Game.startTimer()

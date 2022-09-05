@@ -10,9 +10,10 @@ config_version=4
 
 [application]
 
-config/name="tetris"
+config/name="deztris"
+config/description="tetris clone"
 run/main_scene="res://scenes/main.tscn"
-config/icon="res://icon.png"
+config/icon="res://art/pngs/logo.png"
 
 [autoload]
 
@@ -21,7 +22,7 @@ Game="*res://scripts/Game.gd"
 [display]
 
 window/size/width=400
-window/size/height=840
+window/size/height=880
 window/stretch/shrink=2.0
 
 [importer_defaults]

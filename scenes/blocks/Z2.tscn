@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/Block.gd" type="Script" id=1]
 [ext_resource path="res://art/pngs/zig2.png" type="Texture" id=2]
+[ext_resource path="res://sounds/rotate.wav" type="AudioStream" id=3]
 
 [node name="Z2" type="KinematicBody2D"]
 position = Vector2( 0, 20 )
@@ -27,3 +28,7 @@ position = Vector2( 20, 0 )
 visible = false
 position = Vector2( 10, -30 )
 polygon = PoolVector2Array( -40, 0, -40, 20, -20, 20, -20, 40, 20, 40, 20, 20, 0, 20, 0, 0 )
+
+[node name="rotate" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+pitch_scale = 1.03

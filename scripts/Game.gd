@@ -39,6 +39,7 @@ var timer : Timer
 var lines: int = 0
 var points: int = 0
 var level: int = 1
+var blockStack: Array = []
 
 func createTimer():
 	timer = Timer.new()
@@ -66,6 +67,20 @@ func resetVariables():
 	inPlace = false
 	gameOver = false
 	blockCoords = []
+	initBlockStack()
 	lines = 0
 	points = 0
 	level = 1
+	
+func initBlockStack():
+	blockStack.clear()
+	blockStack.push_back(Game.BLOCKS.keys()[ randi() % Game.BLOCKS.size() ])
+	
+func getNewBlock(): # for the new block
+	var b = blockStack.pop_front()
+	blockStack.push_back(Game.BLOCKS.keys()[ randi() % Game.BLOCKS.size() ])
+	print("Next block will be ... " + String(blockStack[0]))
+	return b
+
+func getNextBlock(): # for the next display
+	return blockStack[0]
